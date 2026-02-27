@@ -1,7 +1,7 @@
 package com.psv.resultanalyzer.controller;
 
-import com.psv.resultanalyzer.models.CustomerDto;
 import com.psv.resultanalyzer.models.CustomerAccountDto;
+import com.psv.resultanalyzer.models.CustomerDto;
 import com.psv.resultanalyzer.models.ResponseDto;
 import com.psv.resultanalyzer.service.IAccountService;
 import lombok.AllArgsConstructor;
@@ -26,17 +26,28 @@ public class AccountsController {
     }
 
     @GetMapping(value = "/fetch")
-    public ResponseEntity<CustomerAccountDto> getAccountByMobileNumber(@RequestParam String mobileNumber){
+    public ResponseEntity<CustomerAccountDto> getAccountByMobileNumber(@RequestParam String mobileNumber) {
         CustomerAccountDto customerAccountDto = accountsService.getAccountByMobileNumber(mobileNumber);
         return ResponseEntity.ok(customerAccountDto);
     }
 
     @PatchMapping(value = "/update")
     public ResponseEntity<ResponseDto> updateAccount(@RequestBody CustomerAccountDto customerAccountDto) {
-        accountsService.updateCustomerAccount(customerAccountDto);
+        boolean isUpdated = accountsService.updateCustomerAccount(customerAccountDto);
         return ResponseEntity.ok(ResponseDto.builder()
+                .data(isUpdated)
                 .statusCode(HttpStatus.OK)
                 .message("Account updated successfully")
+                .build());
+    }
+
+    @DeleteMapping(value = "/delete")
+    public ResponseEntity<ResponseDto> deleteAccount(@RequestParam String mobileNumber) {
+        boolean isDeleted = accountsService.deleteCustomerAccount(mobileNumber);
+        return ResponseEntity.ok(ResponseDto.builder()
+                .data(isDeleted)
+                .statusCode(HttpStatus.OK)
+                .message("Account deleted successfully")
                 .build());
     }
 }

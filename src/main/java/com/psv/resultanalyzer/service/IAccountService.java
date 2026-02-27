@@ -10,5 +10,7 @@ public interface IAccountService {
 
     CustomerAccountDto getAccountByMobileNumber(String mobileNumber);
 
-    void updateCustomerAccount(CustomerAccountDto customerAccountDto);
+    boolean updateCustomerAccount(CustomerAccountDto customerAccountDto);
+
+    boolean deleteCustomerAccount(String mobileNumber);
 }

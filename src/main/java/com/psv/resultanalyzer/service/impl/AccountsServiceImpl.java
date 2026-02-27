@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -60,7 +59,7 @@ public class AccountsServiceImpl implements IAccountService {
     }
 
     @Override
-    public void updateCustomerAccount(CustomerAccountDto customerAccountDto) {
+    public boolean updateCustomerAccount(CustomerAccountDto customerAccountDto) {
         // check if customer exists
         Optional<Customer> customerOpt = customerRepository.findByMobileNumber(customerAccountDto.getMobileNumber());
         if (customerOpt.isEmpty()) {
@@ -77,8 +76,8 @@ public class AccountsServiceImpl implements IAccountService {
         customerRepository.save(customer);
 
         // update account details and create a new account record
-        Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId())
-                .orElseThrow(() -> ResultsError.ACCOUNT_NOT_FOUND.toException("customerId", customer.getName()));
+        Accounts accounts = accountsRepository.findById(customerAccountDto.getAccountNumber())
+                .orElseThrow(() -> ResultsError.ACCOUNT_NOT_FOUND.toException("accountNumber", customerAccountDto.getAccountNumber()));
 
         accounts.setAccountType(customerAccountDto.getAccountType());
         accounts.setBranchAddress(customerAccountDto.getBranchAddress());
@@ -86,6 +85,26 @@ public class AccountsServiceImpl implements IAccountService {
         accounts.setUpdatedBy("System");
 
         accountsRepository.save(accounts);
+        return true;
+    }
+
+    @Override
+    public boolean deleteCustomerAccount(String mobileNumber) {
+        Optional<Customer> customerOpt = customerRepository.findByMobileNumber(mobileNumber);
+        if (customerOpt.isEmpty()) {
+            throw ResultsError.CUSTOMER_NOT_FOUND.toException("mobileNumber", mobileNumber);
+        }
+        Customer customer = customerOpt.get();
+        Optional<Accounts> accountOpt = accountsRepository.findByCustomerId(customer.getCustomerId());
+
+        if (accountOpt.isEmpty()) {
+            throw ResultsError.ACCOUNT_NOT_FOUND.toException("customerId", customer.getName());
+        }
+
+        customerRepository.deleteById(customer.getCustomerId());
+        accountsRepository.deleteByCustomerId(customer.getCustomerId());
+
+        return false;
     }
 
     private Accounts createAccount(Customer savedCustomer) {
