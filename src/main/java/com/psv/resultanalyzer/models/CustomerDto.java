@@ -13,4 +13,5 @@ public class CustomerDto {
     String name;
     String email;
     String mobileNumber;
+    AccountsDto accountsDto;
 }

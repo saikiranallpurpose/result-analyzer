@@ -30,4 +30,13 @@ public class AccountsController {
         CustomerAccountDto customerAccountDto = accountsService.getAccountByMobileNumber(mobileNumber);
         return ResponseEntity.ok(customerAccountDto);
     }
+
+    @PatchMapping(value = "/update")
+    public ResponseEntity<ResponseDto> updateAccount(@RequestBody CustomerAccountDto customerAccountDto) {
+        accountsService.updateCustomerAccount(customerAccountDto);
+        return ResponseEntity.ok(ResponseDto.builder()
+                .statusCode(HttpStatus.OK)
+                .message("Account updated successfully")
+                .build());
+    }
 }

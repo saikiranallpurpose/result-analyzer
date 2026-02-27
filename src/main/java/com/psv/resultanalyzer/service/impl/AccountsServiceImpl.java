@@ -59,6 +59,36 @@ public class AccountsServiceImpl implements IAccountService {
                 .build();
     }
 
+    @Override
+    public void updateCustomerAccount(CustomerAccountDto customerAccountDto) {
+        // check if customer exists
+        Optional<Customer> customerOpt = customerRepository.findByMobileNumber(customerAccountDto.getMobileNumber());
+        if (customerOpt.isEmpty()) {
+            throw ResultsError.CUSTOMER_NOT_FOUND.toException("mobileNumber", customerAccountDto.getMobileNumber());
+        }
+
+        // update customer details and create a new customer record
+        Customer customer = Customer.builder()
+                .name(customerAccountDto.getName())
+                .email(customerAccountDto.getEmail())
+                .mobileNumber(customerAccountDto.getMobileNumber())
+                .updatedAt(LocalDateTime.now())
+                .updatedBy("System")
+                .build();
+
+        customerRepository.save(customer);
+
+        // update account details and create a new account record
+        Accounts accounts = Accounts.builder()
+                .accountType(customerAccountDto.getAccountType())
+                .branchAddress(customerAccountDto.getBranchAddress())
+                .updatedAt(LocalDateTime.now())
+                .updatedBy("System")
+                .build();
+
+        accountsRepository.save(accounts);
+    }
+
     private Accounts createAccount(Customer savedCustomer) {
         return Accounts.builder()
                 .accountId(generateAccountId())
