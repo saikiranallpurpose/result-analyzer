@@ -27,6 +27,8 @@ public class AccountsServiceImpl implements IAccountService {
         validateCustomer(customerDto.getMobileNumber());
 
         Customer customer = CustomerMapper.mapDtoToEntity(customerDto);
+        customer.setCreatedAt(LocalDateTime.now());
+        customer.setCreatedBy("System");
 
         Customer savedCustomer = customerRepository.save(customer);
 
@@ -41,6 +43,8 @@ public class AccountsServiceImpl implements IAccountService {
                 .customerId(savedCustomer.getCustomerId())
                 .accountType("Savings")
                 .branchAddress("123 Main St")
+                .updatedAt(LocalDateTime.now())
+                .updatedBy("User-Update")
                 .build();
     }
 
