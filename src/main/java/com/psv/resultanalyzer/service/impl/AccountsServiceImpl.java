@@ -43,8 +43,8 @@ public class AccountsServiceImpl implements IAccountService {
                 .customerId(savedCustomer.getCustomerId())
                 .accountType("Savings")
                 .branchAddress("123 Main St")
-                .updatedAt(LocalDateTime.now())
-                .updatedBy("User-Update")
+                .createdAt(LocalDateTime.now())
+                .createdBy("System")
                 .build();
     }
 
