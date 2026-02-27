@@ -15,4 +15,5 @@ public class CustomerAccountDto {
     private long accountNumber;
     private String accountType;
     private String mobileNumber;
+    private String branchAddress;
 }

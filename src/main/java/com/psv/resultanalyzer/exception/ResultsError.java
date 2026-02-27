@@ -14,7 +14,9 @@ public enum ResultsError {
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred"),
     DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "Requested data not found"),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "Unauthorized access"),
-    CUSTOMER_ALREADY_EXISTS(HttpStatus.CONFLICT, "Customer already exists: ${customerName}"),;
+    CUSTOMER_ALREADY_EXISTS(HttpStatus.CONFLICT, "Customer already exists: ${customerName}"),
+    CUSTOMER_NOT_FOUND(HttpStatus.BAD_REQUEST, "Customer not found with mobile number: ${mobileNumber}"),
+    ACCOUNT_NOT_FOUND(HttpStatus.BAD_REQUEST, "Account not found for customer : ${customerName}");
 
     ResultsError(HttpStatus statusCode, String message) {
         this.statusCode = statusCode;

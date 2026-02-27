@@ -4,6 +4,7 @@ import com.psv.resultanalyzer.models.ErrorMessageDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(ResultException.class)
     public ResponseEntity<ErrorMessageDto> handleResultException(ResultException ex, WebRequest webRequest) {
         log.error(ex.getMessage());
         ErrorMessageDto errorMessageDto = ex.getErrorMessageDto();

@@ -4,6 +4,7 @@ import com.psv.resultanalyzer.entity.Accounts;
 import com.psv.resultanalyzer.entity.Customer;
 import com.psv.resultanalyzer.exception.ResultsError;
 import com.psv.resultanalyzer.mapper.CustomerMapper;
+import com.psv.resultanalyzer.models.CustomerAccountDto;
 import com.psv.resultanalyzer.models.CustomerDto;
 import com.psv.resultanalyzer.repository.AccountsRepository;
 import com.psv.resultanalyzer.repository.CustomerRepository;
@@ -35,6 +36,27 @@ public class AccountsServiceImpl implements IAccountService {
         Accounts accounts = createAccount(savedCustomer);
 
         accountsRepository.save(accounts);
+    }
+
+    @Override
+    public CustomerAccountDto getAccountByMobileNumber(String mobileNumber) {
+        Optional<Customer> customerOpt = customerRepository.findByMobileNumber(mobileNumber);
+        if (customerOpt.isEmpty()) {
+            throw ResultsError.CUSTOMER_NOT_FOUND.toException("mobileNumber", mobileNumber);
+        }
+
+        Customer customer = customerOpt.get();
+        Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId())
+                .orElseThrow(() -> ResultsError.ACCOUNT_NOT_FOUND.toException("customerId", customer.getName()));
+
+        return CustomerAccountDto.builder()
+                .name(customer.getName())
+                .email(customer.getEmail())
+                .mobileNumber(customer.getMobileNumber())
+                .accountNumber(accounts.getAccountId())
+                .accountType(accounts.getAccountType())
+                .branchAddress(accounts.getBranchAddress())
+                .build();
     }
 
     private Accounts createAccount(Customer savedCustomer) {

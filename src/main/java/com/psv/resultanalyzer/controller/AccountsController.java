@@ -10,13 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/accounts")
+@RequestMapping("/api")
 @AllArgsConstructor
 public class AccountsController {
 
     IAccountService accountsService;
 
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/accounts/create")
     public ResponseEntity<ResponseDto> createAccount(@RequestBody CustomerDto customerDto) {
         accountsService.createAccount(customerDto);
         return ResponseEntity.ok(ResponseDto.builder()
@@ -25,9 +25,9 @@ public class AccountsController {
                 .build());
     }
 
-    @GetMapping(value = "/v1/hello")
-    public ResponseEntity<CustomerAccountDto> heloWorld(String name) {
-
-        return ResponseEntity.ok(null);
+    @GetMapping(value = "/fetch")
+    public ResponseEntity<CustomerAccountDto> getAccountByMobileNumber(@RequestParam String mobileNumber){
+        CustomerAccountDto customerAccountDto = accountsService.getAccountByMobileNumber(mobileNumber);
+        return ResponseEntity.ok(customerAccountDto);
     }
 }
