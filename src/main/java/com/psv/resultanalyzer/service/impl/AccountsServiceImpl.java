@@ -68,23 +68,22 @@ public class AccountsServiceImpl implements IAccountService {
         }
 
         // update customer details and create a new customer record
-        Customer customer = Customer.builder()
-                .name(customerAccountDto.getName())
-                .email(customerAccountDto.getEmail())
-                .mobileNumber(customerAccountDto.getMobileNumber())
-                .updatedAt(LocalDateTime.now())
-                .updatedBy("System")
-                .build();
+        Customer customer = customerOpt.get();
+        customer.setName(customerAccountDto.getName());
+        customer.setEmail(customerAccountDto.getEmail());
+        customer.setUpdatedAt(LocalDateTime.now());
+        customer.setUpdatedBy("System");
 
         customerRepository.save(customer);
 
         // update account details and create a new account record
-        Accounts accounts = Accounts.builder()
-                .accountType(customerAccountDto.getAccountType())
-                .branchAddress(customerAccountDto.getBranchAddress())
-                .updatedAt(LocalDateTime.now())
-                .updatedBy("System")
-                .build();
+        Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId())
+                .orElseThrow(() -> ResultsError.ACCOUNT_NOT_FOUND.toException("customerId", customer.getName()));
+
+        accounts.setAccountType(customerAccountDto.getAccountType());
+        accounts.setBranchAddress(customerAccountDto.getBranchAddress());
+        accounts.setUpdatedAt(LocalDateTime.now());
+        accounts.setUpdatedBy("System");
 
         accountsRepository.save(accounts);
     }
