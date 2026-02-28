@@ -11,6 +11,7 @@
     <groupId>com.psv</groupId>
     <artifactId>result-analyzer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>result-analyzer</name>
     <description>result-analyzer</description>
     <url/>
@@ -50,7 +51,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
