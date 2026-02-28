@@ -27,8 +27,6 @@ public class AccountsServiceImpl implements IAccountService {
         validateCustomer(customerDto.getMobileNumber());
 
         Customer customer = CustomerMapper.mapDtoToEntity(customerDto);
-        customer.setCreatedAt(LocalDateTime.now());
-        customer.setCreatedBy("System");
 
         Customer savedCustomer = customerRepository.save(customer);
 
@@ -70,8 +68,6 @@ public class AccountsServiceImpl implements IAccountService {
         Customer customer = customerOpt.get();
         customer.setName(customerAccountDto.getName());
         customer.setEmail(customerAccountDto.getEmail());
-        customer.setUpdatedAt(LocalDateTime.now());
-        customer.setUpdatedBy("System");
 
         customerRepository.save(customer);
 
@@ -81,8 +77,6 @@ public class AccountsServiceImpl implements IAccountService {
 
         accounts.setAccountType(customerAccountDto.getAccountType());
         accounts.setBranchAddress(customerAccountDto.getBranchAddress());
-        accounts.setUpdatedAt(LocalDateTime.now());
-        accounts.setUpdatedBy("System");
 
         accountsRepository.save(accounts);
         return true;
@@ -113,8 +107,6 @@ public class AccountsServiceImpl implements IAccountService {
                 .customerId(savedCustomer.getCustomerId())
                 .accountType("Savings")
                 .branchAddress("123 Main St")
-                .createdAt(LocalDateTime.now())
-                .createdBy("System")
                 .build();
     }
 
